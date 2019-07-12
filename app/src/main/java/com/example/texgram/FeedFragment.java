@@ -116,6 +116,7 @@ public class FeedFragment extends Fragment {
         postQuery.include(Post.KEY_USER);
         postQuery.setSkip(page * 20);
         postQuery.setLimit(20);
+        postQuery.orderByDescending("createdAt");
         postQuery.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> newPosts, ParseException e) {
