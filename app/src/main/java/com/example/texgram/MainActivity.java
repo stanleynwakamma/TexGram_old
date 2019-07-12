@@ -2,27 +2,17 @@ package com.example.texgram;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
-    RecyclerView rvPosts;
-    PostAdapter adapter;
-    private ArrayList<Post> posts;
+    BottomNavigationView bottomNavigationView;
     private final String TAG = "MainActivity";
-    private SwipeRefreshLayout swipeContainer;
-    private EndlessRecyclerViewScrollListener scrollListener;
 
 
     @Override
@@ -30,88 +20,44 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        rvPosts = findViewById(R.id.rvPosts);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        posts = new ArrayList<>();
-
-
-
-        // Create adapter passing in the sample user data
-        adapter = new PostAdapter(this, posts);
-
-        // Attach the adapter to the recyclerview to populate items
-        rvPosts.setAdapter(adapter);
-
-        // Set layout manager to position the items
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        rvPosts.setLayoutManager(linearLayoutManager);
-
-        // Lookup the swipe container view
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
-        // Setup refresh listener which triggers new data loading
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // Your code to refresh the list here.
-                // Make sure you call swipeContainer.setRefreshing(false)
-                // once the network request has completed successfully.
-                // 1. First, clear the array of data
-                posts.clear();
-                // 2. Notify the adapter of the update
-                adapter.notifyDataSetChanged(); // or notifyItemRangeRemoved
-                // 3. Reset endless scroll listener when performing a new search
-                scrollListener.resetState();
-
-                queryPosts(0);
-            }
-        });
-        // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-
-        // Retain an instance so that you can call `resetState()` for fresh searches
-        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to the bottom of the list
-                queryPosts(page);
-            }
-        };
-        // Adds the scroll listener to RecyclerView
-        rvPosts.addOnScrollListener(scrollListener);
-
-        queryPosts(0);
+        setupFragments();
     }
 
+    private void setupFragments() {
+        final FragmentManager fragmentManager = getSupportFragmentManager();
 
-    // Used for debugging purposes
-    private void queryPosts(int page){
-        ParseQuery<Post> postQuery = new ParseQuery<Post>(Post.class);
-        postQuery.include(Post.KEY_USER);
-        postQuery.setSkip(page * 20);
-        postQuery.setLimit(20);
-        postQuery.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> newPosts, ParseException e) {
-                if(e != null){
-                    Log.d(TAG,"Error with query");
-                    e.printStackTrace();
-                    return;
-                }
-                for(int i = 0 ; i < posts.size(); i++) {
-                    Post post = posts.get(i);
-                    Log.d(TAG, "Post:" + post.getDescription() + "username = " +post.getUser().getUsername());
-                }
+        // define your fragments here
+        final Fragment fragment1 = new FeedFragment();
+        final Fragment fragment2 = new FeedFragment();
+        final Fragment fragment3 = new FeedFragment();
 
-                posts.addAll(newPosts);
-                adapter.notifyDataSetChanged();
-                swipeContainer.setRefreshing(false);
-            }
-        });
+        // handle navigation selection
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        Fragment fragment;
+                        switch (item.getItemId()) {
+                            case R.id.action_feed:
+                                fragment = fragment1;
+                                break;
+                            case R.id.action_compose:
+                                fragment = fragment2;
+                                break;
+                            case R.id.action_profile:
+                            default:
+                                fragment = fragment3;
+                                break;
+                        }
+                        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+                        return true;
+                    }
+                });
+        // Set default selection
+        bottomNavigationView.setSelectedItemId(R.id.action_feed);
+
     }
 
     public void goToDetails(Post p) {
