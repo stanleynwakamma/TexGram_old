@@ -85,7 +85,7 @@ public class ComposeFragment extends Fragment {
                         btnSelectPhoto.setVisibility(View.VISIBLE);
                         etCaption.setText("");
                         ivPhoto.setImageResource(0);
-                        ((MainActivity) getContext()).bottomNavigationView.setSelectedItemId(0);
+                        ((MainActivity) getContext()).bottomNavigationView.setSelectedItemId(R.id.action_feed);
                     }
                 });
             }

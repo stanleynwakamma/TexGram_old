@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,8 @@ public class FeedFragment extends Fragment {
     private ArrayList<Post> posts;
     private SwipeRefreshLayout swipeContainer;
     private EndlessRecyclerViewScrollListener scrollListener;
+
+    public ParseUser filterUser;
 
     public static FeedFragment  newInstance(int page) {
         Bundle args = new Bundle();
@@ -117,6 +120,11 @@ public class FeedFragment extends Fragment {
         postQuery.setSkip(page * 20);
         postQuery.setLimit(20);
         postQuery.orderByDescending("createdAt");
+
+        if(filterUser != null) {
+            postQuery.whereEqualTo("user", filterUser);
+        }
+
         postQuery.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> newPosts, ParseException e) {
