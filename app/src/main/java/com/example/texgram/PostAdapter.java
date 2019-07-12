@@ -39,7 +39,7 @@ public class PostAdapter extends
 
     // Provide a direct reference to each of the views within a data item
     // Used to cache the views within the item layout for fast access
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final Context context;
 
         // Your holder should contain a member variable
@@ -47,6 +47,7 @@ public class PostAdapter extends
         public TextView tvUsername;
         public TextView  tvCaption;
         public ImageView ivPhoto;
+        public TextView tvCreatedTime;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -60,6 +61,20 @@ public class PostAdapter extends
             tvUsername = (TextView) itemView.findViewById(R.id.tvUsername);
             tvCaption = (TextView) itemView.findViewById(R.id.tvCaption);
             ivPhoto = (ImageView) itemView.findViewById(R.id.ivPhoto);
+            tvCreatedTime = (TextView) itemView.findViewById(R.id.tvCreatedTime);
+
+            itemView.setOnClickListener(this);
+        }
+
+        // Handles the row being being clicked
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition(); // gets item position
+            if (position != RecyclerView.NO_POSITION) { // Check if an item was deleted, but the user clicked it before the UI removed it
+                Post p = mPosts.get(position);
+                // We can access the data within the views
+                ((MainActivity) context).goToDetails(p);
+            }
         }
     }
 
@@ -85,6 +100,7 @@ public class PostAdapter extends
         // Set item views based on your views and data model
         viewHolder.tvUsername.setText(post.getUser().getUsername());
         viewHolder.tvCaption.setText(post.getDescription());
+        viewHolder.tvCreatedTime.setText(Post.getRelativeTimeAgo(post.getCreatedAt()));
         Glide.with(context).load(post.getImage().getUrl()).into(viewHolder.ivPhoto);
     }
 

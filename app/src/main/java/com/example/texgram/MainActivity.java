@@ -1,5 +1,6 @@
 package com.example.texgram;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
         rvPosts = findViewById(R.id.rvPosts);
 
         posts = new ArrayList<>();
+
+
 
         // Create adapter passing in the sample user data
         adapter = new PostAdapter(this, posts);
@@ -109,5 +112,11 @@ public class MainActivity extends AppCompatActivity {
                 swipeContainer.setRefreshing(false);
             }
         });
+    }
+
+    public void goToDetails(Post p) {
+        Intent i = new Intent(this, DetailActivity.class);
+        i.putExtra("post", p);
+        startActivity(i);
     }
 }
