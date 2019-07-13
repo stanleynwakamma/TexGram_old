@@ -2,7 +2,7 @@
 
 **Texgram** is a photo sharing app using Parse as its backend.
 
-Time spent: **1** hour spent in total
+Time spent: **20** hour spent in total
 
 ## User Stories
 
@@ -31,17 +31,20 @@ The following **stretch** features are implemented:
   - [ ] Tapping on a post's username or profile photo goes to that user's profile page
 - [ ] User can comment on a post and see all comments for each post in the post details screen.
 - [ ] User can like a post and see number of likes for each post in the post details screen.
-- [ ] Create a custom Camera View on your phone.
-- [ ] Run your app on your phone and use the camera to take the photo
+- [x] Create a custom Camera View on your phone.
+- [x] Run your app on your phone and use the camera to take the photo
 
-The following **additional** features are implemented:
+The following **additional** features can be implemented:
 
-- [ ] List anything else that you can get done to improve the app functionality!
+- [x] List anything else that you can get done to improve the app functionality!
+  - I can implement landscape view.
+  - I can implement image selection from a file, as an alternative to using the camera.
+  - I can implement the upload of short videos.
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
-1.
-2.
+1. I will like to discuss more about using fragments.
+2. I will like to discuss more about having my app in Google Play so users can download it.
 
 ## Video Walkthrough
 
@@ -56,15 +59,19 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 List an 3rd party libraries, icons, graphics, or other assets you used in your app.
 
 - [Android Async Http Client](http://loopj.com/android-async-http/) - networking library
+- Instagram icons
+- Glide
+- Parse (Server)
 
 
 ## Notes
 
 Describe any challenges encountered while building the app.
+I need to learn more about using fragments.
 
 ## License
 
-    Copyright 2019 Stanley Nwakamma
+    Copyright 2019 Stanley Nwakamma, Facebook Uniuversity for Engineering.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
