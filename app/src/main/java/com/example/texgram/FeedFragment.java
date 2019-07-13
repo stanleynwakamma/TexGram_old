@@ -52,6 +52,7 @@ public class FeedFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
 
+
         rvPosts = view.findViewById(R.id.rvPosts);
 
         posts = new ArrayList<>();
@@ -113,7 +114,6 @@ public class FeedFragment extends Fragment {
 
 
 
-    // Used for debugging purposes
     private void queryPosts(int page){
         ParseQuery<Post> postQuery = new ParseQuery<Post>(Post.class);
         postQuery.include(Post.KEY_USER);
@@ -144,4 +144,6 @@ public class FeedFragment extends Fragment {
             }
         });
     }
+
+
 }
